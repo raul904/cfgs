@@ -1,0 +1,2 @@
+# cfgs
+Repositorio para actividades
