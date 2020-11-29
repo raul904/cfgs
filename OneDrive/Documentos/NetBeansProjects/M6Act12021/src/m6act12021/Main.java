@@ -31,7 +31,7 @@ public class Main {
 //        con = DriverManager.getConnection(url, usuari, password);
 //        System.out.println("Connexio realitzada usant DriverManager");
 //        con.close();
-//        
+  
 //        }
 //    catch(SQLException ex){
 //        System.out.println("Error "+ ex.getMessage());
