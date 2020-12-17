@@ -53,6 +53,8 @@ public class Main {
         System.out.println("4-Introduir poblacio");
         System.out.println("5-Llista els alumnes");
         System.out.println("6-Llista les poblacions");
+//        listar un solo alumno
+//        listar una sola poblacion
         System.out.println("7-Sortir");
            
         int Opcion;
@@ -222,12 +224,9 @@ public class Main {
         }
         
         
-        
-            
+   
             }     
-  
-        
-        
+
     
     }
     
@@ -245,10 +244,20 @@ public class Main {
         
         }
 
-    public static void mostrarAlumnes() {
-        TypedQuery query =
-            em.createQuery("SELECT p FROM Point p", Point.class);
-        List<Point> results = query.getResultList();
+    public static void mostrarAlumnes() throws SQLException {
+    stmt = con.prepareStatement("SELECT * FROM alumnes");
+    
+        ResultSet resConculta = stmt.executeQuery("SELECT * FROM alumnes");
+            while(resConculta.next())
+            {
+         
+                System.out.print("Nom: "+resConculta.getString(1)+"||");    //First Column
+                System.out.print("Dni: "+resConculta.getString(2)+"||");    //Second Column
+                System.out.print("Data de naixement: "+resConculta.getString(3)+"||");    //Third Column
+                System.out.print("Adreça postal: "+resConculta.getString(4)+"||");    //Fourth Column
+                System.out.println();
+            }
+
     }
 
    
