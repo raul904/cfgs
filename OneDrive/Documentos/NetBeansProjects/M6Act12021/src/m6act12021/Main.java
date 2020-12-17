@@ -76,8 +76,8 @@ public class Main {
            case 5:mostrarAlumnes();
            break;
                
-//           case 6:mostrarPobles();
-//           break;
+           case 6:mostrarPobles();
+           break;
                
            case 7: chivato=1;
                break;
@@ -255,9 +255,24 @@ public class Main {
                 System.out.print("Dni: "+resConculta.getString(2)+"||");    //Second Column
                 System.out.print("Data de naixement: "+resConculta.getString(3)+"||");    //Third Column
                 System.out.print("Adreça postal: "+resConculta.getString(4)+"||");    //Fourth Column
+                System.out.print("Sexe: "+resConculta.getString(5)+"||"); 
+                System.out.print("Codi postal: "+resConculta.getString(6)+"||"); 
                 System.out.println();
             }
 
+    }
+
+    public static void mostrarPobles() throws SQLException {
+        stmt = con.prepareStatement("SELECT * FROM poblacions");
+    
+        ResultSet resConculta = stmt.executeQuery("SELECT * FROM poblacions");
+            while(resConculta.next())
+            {
+                System.out.print("Codi Postal: "+resConculta.getString(1)+"||");    //First Column
+                System.out.print("Nom Poblacio: "+resConculta.getString(2)+"||");    //Second Column
+                System.out.println();
+            }
+        
     }
 
    
