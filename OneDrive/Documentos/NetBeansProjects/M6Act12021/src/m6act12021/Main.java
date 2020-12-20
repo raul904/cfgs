@@ -86,9 +86,8 @@ public class Main {
            case 8:mostrar1Alumne();
            break;     
                
-           case 9: introduirPoblacio();
+           case 9:esborrarPoblacio();
            break;    
-               
            case 10: 
             chivato=1;   
             sc.close();
@@ -202,7 +201,6 @@ public class Main {
                  stmt.executeUpdate("UPDATE alumnes SET Sexe = '"+ genero + "'WHERE dni='"+DNI+"';");
             }
            
-//                     comprobar
             System.out.println("Codi Postal["+cp+"]: ");
             codiPostal = sc.nextLine();
             if(!(codiPostal.length()==0)){
@@ -211,7 +209,9 @@ public class Main {
           
             
         }catch(Exception e){
+            System.out.println("Fixa't si has posat un codi postal que existeixi");
             e.printStackTrace();
+            
         }        
    
             }     
@@ -242,20 +242,23 @@ public class Main {
 	stmt.executeUpdate("INSERT INTO poblacions(codiPostal,Nom_Poblacio)"+ 
                         "VALUES  ('"+Codi_Postal+"','"
                                    +Nom_poble+"')");
+        }else{
+        System.out.println("Error, aquesta població ja existeix en la base de dades");
         }
          }catch(Exception e){
-         System.out.println("Erro al introduir nova poblacio, fixa't si has posat un codi postal existent");
+         System.out.println("Error al introduir nova poblacio, fixa't si has posat un codi postal existent");
+          e.printStackTrace();
          }
          
         }
 
     public static void mostrarAlumnes() throws SQLException {
+        try{
         stmt = con.prepareStatement("SELECT * FROM alumnes");
     
         ResultSet resConculta = stmt.executeQuery("SELECT * FROM alumnes");
             while(resConculta.next())
             {
-         
                 System.out.print("Nom: "+resConculta.getString(1)+"||");    //First Column
                 System.out.print("Dni: "+resConculta.getString(2)+"||");    //Second Column
                 System.out.print("Data de naixement: "+resConculta.getString(3)+"||");    //Third Column
@@ -264,10 +267,15 @@ public class Main {
                 System.out.print("Codi postal: "+resConculta.getString(6)+"||"); 
                 System.out.println();
             }
+        }catch(Exception e){
+            System.out.println("Error");
+             e.printStackTrace();
+        } 
 
     }
 
     public static void mostrarPobles() throws SQLException {
+        try{
         stmt = con.prepareStatement("SELECT * FROM poblacions");
     
         ResultSet resConculta = stmt.executeQuery("SELECT * FROM poblacions");
@@ -277,12 +285,17 @@ public class Main {
                 System.out.print("Nom Poblacio: "+resConculta.getString(2)+"||");    //Second Column
                 System.out.println();
             }
+        }catch(Exception e){
+            System.out.println("Error");
+             e.printStackTrace();
+        }
         
     }
 
     public static void mostrar1Poble() throws SQLException {
        try{
         String codiPostal;
+        System.out.println("Inrodueix el codi postal:");
         codiPostal = sc.next();
        
         stmt = con.prepareStatement("SELECT * FROM poblacions WHERE codiPostal = '"+ codiPostal +"'");
@@ -296,7 +309,8 @@ public class Main {
             }
 
        }catch(Exception e){
-        //Falta control de errors
+           System.out.println("Error");
+            e.printStackTrace();
        }
 
     }
@@ -322,13 +336,16 @@ public class Main {
             }
 
        }catch(Exception e){
-        //Falta control de errors
+         System.out.println("Error");
+          e.printStackTrace();
        }
     }
 
-    private static void introduirPoblacio() {
+    private static void esborrarPoblacio() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+  
     
     
       
