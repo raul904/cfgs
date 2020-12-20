@@ -20,19 +20,19 @@ import java.util.Scanner;
  * @author Raul
  */
 public class Main {
+    
     static Scanner sc = new Scanner(System.in);
     static Statement stmt = null;
     static  Connection con = null;
     private static ResultSet res;
+    
     public static void main(String[] args) throws SQLException {
              
-//        Connection connection = null;
-    
+
         String url = "jdbc:mysql://localhost:3306/m6uf2";
         String usuari = "root";
         String password = "";
-       
-        
+               
         try{
            Class.forName("com.mysql.jdbc.Driver");
            con = (Connection) DriverManager.getConnection(url, usuari, password);
@@ -52,10 +52,7 @@ public class Main {
         System.out.println("6-Llista les poblacions");
         System.out.println("7-Llistar una sola poblacio");
         System.out.println("8-Llistar una sol alumne");
-        System.out.println("9-Introduir poblacio");
-        
-//        listar un solo alumno
-//        listar una sola poblacion
+        System.out.println("9-Esborrar poblacio");
         System.out.println("10-Sortir");
            
         int Opcion;
@@ -91,7 +88,6 @@ public class Main {
            case 10: 
             chivato=1;   
             sc.close();
-            //stmt.close(); falla
                break;
         
         }   
@@ -101,7 +97,7 @@ public class Main {
     
     }
     
-    public static void introducirNom(){
+    private static void introducirNom(){
           
         try{
             System.out.println("Introdueix el nom");
@@ -133,7 +129,8 @@ public class Main {
            
     }
 
-    public static void esborrarAlumne() throws SQLException {
+    private static void esborrarAlumne(){
+        try{
         System.out.println("Digues el dni del alumne que vols eliminar");
         
         String dni = sc.next();
@@ -148,11 +145,18 @@ public class Main {
         if(res.next()==true){
              stmt = (Statement) con.createStatement();
             stmt.execute("DELETE FROM alumnes WHERE dni = '"+ dni +"'");
+        }else{
+        System.out.println("No existe este alumno con ese dni");
+        }
+        }catch(Exception e){
+           e.printStackTrace();
         }
         
     }
 
-    public static void modificarAlumne() throws SQLException {
+    private static void modificarAlumne(){
+            
+        try{
         ResultSet resModificacio;
         String Nom;
         String DNI;
@@ -179,8 +183,7 @@ public class Main {
           s=resModificacio.getString(5);
           cp=resModificacio.getString(6);
           
-          
-        try{
+      
             
            sc.nextLine();//comprobar si hace falta esta linea
            System.out.println("Nom["+n+"]: ");
@@ -208,18 +211,17 @@ public class Main {
             }
           
             
+        }
         }catch(Exception e){
             System.out.println("Fixa't si has posat un codi postal que existeixi");
             e.printStackTrace();
-            
-        }        
-   
+                         
             }     
 
     
     }
     
-      public static void afegirPoblacions() throws SQLException {
+      private static void afegirPoblacions(){
          try{
          ResultSet resConsul;
          boolean c;
@@ -252,7 +254,7 @@ public class Main {
          
         }
 
-    public static void mostrarAlumnes() throws SQLException {
+    private static void mostrarAlumnes(){
         try{
         stmt = con.prepareStatement("SELECT * FROM alumnes");
     
@@ -274,7 +276,7 @@ public class Main {
 
     }
 
-    public static void mostrarPobles() throws SQLException {
+    private static void mostrarPobles(){
         try{
         stmt = con.prepareStatement("SELECT * FROM poblacions");
     
@@ -292,7 +294,7 @@ public class Main {
         
     }
 
-    public static void mostrar1Poble() throws SQLException {
+    private static void mostrar1Poble(){
        try{
         String codiPostal;
         System.out.println("Inrodueix el codi postal:");
@@ -315,7 +317,7 @@ public class Main {
 
     }
 
-    public static void mostrar1Alumne(){
+    private static void mostrar1Alumne(){
        try{
         String dni;
         System.out.println("Introdueix el dni del alumne que vols consultar");
@@ -341,8 +343,55 @@ public class Main {
        }
     }
 
-    private static void esborrarPoblacio() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private static void esborrarPoblacio(){
+     try{
+        int chivato;
+        System.out.println("Quin codi postal vols borrar");
+        String codiPostal;
+        codiPostal = sc.next();
+        
+        boolean consulta;
+             
+          stmt = con.prepareStatement("SELECT * FROM poblacions WHERE codiPostal = '"+ codiPostal +"'");
+        
+          ResultSet resConsul = stmt.executeQuery("SELECT * FROM poblacions WHERE codiPostal = '"+ codiPostal +"'");
+          
+          consulta=resConsul.next();
+          
+          if(consulta==true){
+               stmt = con.prepareStatement("SELECT * FROM alumnes WHERE codiPostal = '"+ codiPostal +"'");
+               ResultSet resConAlu = stmt.executeQuery("SELECT * FROM alumnes WHERE codiPostal = '"+ codiPostal +"'");
+               
+              System.out.println("S'esborraran els seguents alumnes: ");
+                while(resConAlu.next())
+            {            
+                System.out.print("Nom: "+resConAlu.getString(1)+"||");    //First Column
+                System.out.print("Dni: "+resConAlu.getString(2)+"||");    //Second Column
+                System.out.print("Data de naixement: "+resConAlu.getString(3)+"||");    //Third Column
+                System.out.print("Adreça postal: "+resConAlu.getString(4)+"||");    //Fourth Column
+                System.out.print("Sexe: "+resConAlu.getString(5)+"||"); 
+                System.out.print("Codi postal: "+resConAlu.getString(6)+"||"); 
+                System.out.println();
+            }
+                System.out.println("Introdueix un 1 si el vols eliminar igualment, sinó introdueix 2");
+                chivato = sc.nextInt();
+                if(chivato==1){
+                   stmt.execute("DELETE FROM poblacions WHERE codiPostal = '"+ codiPostal +"'");
+                }
+               if(chivato==2){
+                   System.out.println("No s'ha esborrat res");
+               }
+                
+              
+          }else{
+              System.out.println("Aquet codi postal no existeix a la base de dades");
+          }
+             
+        }
+        catch(Exception e){
+            System.out.println("Comprova que existeixi");
+             e.printStackTrace();
+        }
     }
 
   
