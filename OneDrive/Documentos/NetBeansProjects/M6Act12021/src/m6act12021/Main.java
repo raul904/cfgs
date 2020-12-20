@@ -44,20 +44,24 @@ public class Main {
         
         int chivato=0;
         while(chivato!=1){
-        System.out.println("1-Introduir Alumne");
-        System.out.println("2-Eliminar Alumne");
-        System.out.println("3-Modificar alumne");
-        System.out.println("4-Introduir poblacio");
-        System.out.println("5-Llista els alumnes");
-        System.out.println("6-Llista les poblacions");
-        System.out.println("7-Llistar una sola poblacio");
-        System.out.println("8-Llistar una sol alumne");
-        System.out.println("9-Esborrar poblacio");
+        System.out.println("Opcions d'Alumnes:");    
+        System.out.println("    1-Introduir Alumne");
+        System.out.println("    2-Eliminar Alumne");
+        System.out.println("    3-Modificar alumne");
+        System.out.println("    4-Llistar una sol alumne");
+        System.out.println("    5-Llista els alumnes");
+        System.out.println("Opcions de Poblacions:");
+        System.out.println("    6-Introduir poblacio");
+        System.out.println("    7-Llistar una sola poblacio");
+        System.out.println("    8-Llista les poblacions");
+        System.out.println("    9-Esborrar poblacio");
         System.out.println("10-Sortir");
            
         int Opcion;
         Opcion = sc.nextInt();
         switch(Opcion){
+          
+          //opcions alumnes  
         
            case 1: introducirNom() ;
            break;
@@ -68,19 +72,21 @@ public class Main {
            case 3: modificarAlumne();
            break;
            
-           case 4:afegirPoblacions();
+           case 4:mostrar1Alumne();
            break;
                
            case 5:mostrarAlumnes();
            break;
                
-           case 6:mostrarPobles();
+          //opcions pobles
+               
+           case 6:afegirPoblacions();
            break;
                
            case 7:mostrar1Poble();
            break;
            
-           case 8:mostrar1Alumne();
+           case 8:mostrarPobles();
            break;     
                
            case 9:esborrarPoblacio();
@@ -93,12 +99,10 @@ public class Main {
         }   
         
         }
-        
-    
+            
     }
     
-    private static void introducirNom(){
-          
+    private static void introducirNom(){ 
         try{
             System.out.println("Introdueix el nom");
 		String Nom = sc.next();
@@ -128,7 +132,7 @@ public class Main {
           }
            
     }
-
+//Aqueta funcio elimina un alumne
     private static void esborrarAlumne(){
         try{
         System.out.println("Digues el dni del alumne que vols eliminar");
@@ -154,8 +158,7 @@ public class Main {
         
     }
 
-    private static void modificarAlumne(){
-            
+    private static void modificarAlumne(){   
         try{
         ResultSet resModificacio;
         String Nom;
@@ -221,8 +224,8 @@ public class Main {
     
     }
     
-      private static void afegirPoblacions(){
-         try{
+      private static void afegirPoblacions(){   
+       try{
          ResultSet resConsul;
          boolean c;
           
