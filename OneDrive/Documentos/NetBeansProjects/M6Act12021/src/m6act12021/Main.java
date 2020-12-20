@@ -15,7 +15,6 @@ import java.sql.ResultSet;
 import java.util.List;
 import java.util.Scanner;
 
-
 /**
  *
  * @author Raul
@@ -26,17 +25,15 @@ public class Main {
     static  Connection con = null;
     private static ResultSet res;
     public static void main(String[] args) throws SQLException {
-      
-        
+             
 //        Connection connection = null;
-     
+    
         String url = "jdbc:mysql://localhost:3306/m6uf2";
         String usuari = "root";
         String password = "";
        
         
         try{
-            
            Class.forName("com.mysql.jdbc.Driver");
            con = (Connection) DriverManager.getConnection(url, usuari, password);
             
@@ -53,9 +50,13 @@ public class Main {
         System.out.println("4-Introduir poblacio");
         System.out.println("5-Llista els alumnes");
         System.out.println("6-Llista les poblacions");
+        System.out.println("7-Llistar una sola poblacio");
+        System.out.println("8-Llistar una sol alumne");
+        System.out.println("9-Introduir poblacio");
+        
 //        listar un solo alumno
 //        listar una sola poblacion
-        System.out.println("7-Sortir");
+        System.out.println("10-Sortir");
            
         int Opcion;
         Opcion = sc.nextInt();
@@ -79,39 +80,31 @@ public class Main {
            case 6:mostrarPobles();
            break;
                
-           case 7: chivato=1;
+           case 7:mostrar1Poble();
+           break;
+           
+           case 8:mostrar1Alumne();
+           break;     
+               
+           case 9: introduirPoblacio();
+           break;    
+               
+           case 10: 
+            chivato=1;   
+            sc.close();
+            //stmt.close(); falla
                break;
         
+        }   
+        
         }
         
-        
-        }
-        
-            
-//            
-//            
-//            stmt = connection.createStatement();
-//            stmt.execute("INSERT INTO EMPLOYEE (Nom) "
-//                                + "VALUES ('Lokesh')");
-//        } 
-//        catch (Exception e) {
-//            e.printStackTrace();
-//        }finally {
-//            try {
-//                stmt.close();
-//                connection.close();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-    
-    
-    
     
     }
     
     public static void introducirNom(){
-          try{
+          
+        try{
             System.out.println("Introdueix el nom");
 		String Nom = sc.next();
             System.out.println("Introdueix el dni");
@@ -124,8 +117,7 @@ public class Main {
                 int codiPostal = sc.nextInt();
             System.out.println("Sexe home(H) o done(D)");
                 String genero = sc.next();
-    
-                
+                  
             
         stmt = (Statement) con.createStatement();
 	stmt.executeUpdate("INSERT INTO alumnes(Nom,dni,Data_De_Naixement,Adreça_Postal,Sexe,codiPostal)"+ 
@@ -158,7 +150,6 @@ public class Main {
              stmt = (Statement) con.createStatement();
             stmt.execute("DELETE FROM alumnes WHERE dni = '"+ dni +"'");
         }
-
         
     }
 
@@ -196,34 +187,32 @@ public class Main {
            System.out.println("Nom["+n+"]: ");
            Nom = sc.nextLine();
            if(!(Nom.length()==0)){
-            stmt.executeUpdate("UPDATE alumne SET Nom = '"+ Nom + "'WHERE dni='"+DNI+"';");
+            stmt.executeUpdate("UPDATE alumnes SET Nom = '"+ Nom + "'WHERE dni='"+DNI+"';");
            }
            
            System.out.println("Adreça Postal["+ap+"]: ");
            adreçaPostal = sc.nextLine();
            if(!(adreçaPostal.length()==0)){
-             stmt.executeUpdate("UPDATE alumne SET Adreça_Postal = '"+ adreçaPostal + "'WHERE dni='"+DNI+"';");
+             stmt.executeUpdate("UPDATE alumnes SET Adreça_Postal = '"+ adreçaPostal + "'WHERE dni='"+DNI+"';");
            }
         
            System.out.println("Sexe["+s+"]: ");
             genero = sc.nextLine();
             if(!(genero.length()==0)){
-                 stmt.executeUpdate("UPDATE alumne SET Sexe = '"+ genero + "'WHERE dni='"+DNI+"';");
+                 stmt.executeUpdate("UPDATE alumnes SET Sexe = '"+ genero + "'WHERE dni='"+DNI+"';");
             }
            
 //                     comprobar
             System.out.println("Codi Postal["+cp+"]: ");
             codiPostal = sc.nextLine();
             if(!(codiPostal.length()==0)){
-            stmt.executeUpdate("UPDATE alumne SET codiPostal = '"+ codiPostal + "'WHERE dni='"+DNI+"';");
+            stmt.executeUpdate("UPDATE alumnes SET codiPostal = '"+ codiPostal + "'WHERE dni='"+DNI+"';");
             }
           
             
         }catch(Exception e){
             e.printStackTrace();
-        }
-        
-        
+        }        
    
             }     
 
@@ -231,21 +220,37 @@ public class Main {
     }
     
       public static void afegirPoblacions() throws SQLException {
-      
+         try{
+         ResultSet resConsul;
+         boolean c;
+          
         System.out.println("Introdueix un Codi Postal");
             String Codi_Postal = sc.next();
         System.out.println("Introdueix el nom de la població");
             String Nom_poble = sc.next();
-         
+            
         stmt = (Statement) con.createStatement();
-	stmt.executeUpdate("INSERT INTO poblacions(Codi_Postal,Nom_Poblacio)"+ 
+       
+        resConsul = stmt.executeQuery("SELECT Nom_Poblacio FROM poblacions WHERE Nom_Poblacio = '"+ Nom_poble +"'");
+        
+        c=resConsul.next();
+        
+        if(c==false){ 
+        ResultSet resConculta = stmt.executeQuery("SELECT * FROM alumnes");
+        
+        stmt = (Statement) con.createStatement();
+	stmt.executeUpdate("INSERT INTO poblacions(codiPostal,Nom_Poblacio)"+ 
                         "VALUES  ('"+Codi_Postal+"','"
                                    +Nom_poble+"')");
-        
+        }
+         }catch(Exception e){
+         System.out.println("Erro al introduir nova poblacio, fixa't si has posat un codi postal existent");
+         }
+         
         }
 
     public static void mostrarAlumnes() throws SQLException {
-    stmt = con.prepareStatement("SELECT * FROM alumnes");
+        stmt = con.prepareStatement("SELECT * FROM alumnes");
     
         ResultSet resConculta = stmt.executeQuery("SELECT * FROM alumnes");
             while(resConculta.next())
@@ -275,6 +280,56 @@ public class Main {
         
     }
 
-   
+    public static void mostrar1Poble() throws SQLException {
+       try{
+        String codiPostal;
+        codiPostal = sc.next();
        
+        stmt = con.prepareStatement("SELECT * FROM poblacions WHERE codiPostal = '"+ codiPostal +"'");
+       
+            ResultSet resConculta = stmt.executeQuery("SELECT * FROM poblacions WHERE codiPostal = '"+ codiPostal +"'");
+            while(resConculta.next())
+            {
+                System.out.print("Codi Postal: "+resConculta.getString(1)+"||");    //First Column
+                System.out.print("Nom Poblacio: "+resConculta.getString(2)+"||");    //Second Column
+                System.out.println();
+            }
+
+       }catch(Exception e){
+        //Falta control de errors
+       }
+
+    }
+
+    public static void mostrar1Alumne(){
+       try{
+        String dni;
+        System.out.println("Introdueix el dni del alumne que vols consultar");
+        dni = sc.next();
+       
+        stmt = con.prepareStatement("SELECT * FROM alumnes WHERE dni = '"+ dni +"'");
+       
+            ResultSet resConculta = stmt.executeQuery("SELECT * FROM alumnes WHERE dni = '"+ dni +"'");
+            while(resConculta.next())
+            {
+                System.out.print("Nom: "+resConculta.getString(1)+"||");    //First Column
+                System.out.print("Dni: "+resConculta.getString(2)+"||");    //Second Column
+                System.out.print("Data de naixement: "+resConculta.getString(3)+"||");    //Third Column
+                System.out.print("Adreça postal: "+resConculta.getString(4)+"||");    //Fourth Column
+                System.out.print("Sexe: "+resConculta.getString(5)+"||"); 
+                System.out.print("Codi postal: "+resConculta.getString(6)+"||"); 
+                System.out.println();
+            }
+
+       }catch(Exception e){
+        //Falta control de errors
+       }
+    }
+
+    private static void introduirPoblacio() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+      
 }
