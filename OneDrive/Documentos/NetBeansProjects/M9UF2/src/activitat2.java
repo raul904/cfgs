@@ -35,6 +35,7 @@ public class activitat2 {
     System.out.println("Completat");
     }
 
+    
     // Fil Runnable
     class ExecutaFil implements Runnable {
         @Override
