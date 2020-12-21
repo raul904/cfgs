@@ -101,14 +101,14 @@ public class Main {
         }
             
     }
-    
+    //Afegeix un alumne a la base de dades
     private static void introducirNom(){ 
         try{
             System.out.println("Introdueix el nom");
 		String Nom = sc.next();
             System.out.println("Introdueix el dni");
                 String DNI = sc.next();
-            System.out.println("Introdueix la data");
+            System.out.println("Introdueix la data de naixement(YYYY-MM-DD):");
                 String data = sc.next();
             System.out.println("Introdueix la adreça postal");
                 String adreçaPostal = sc.next();
@@ -132,7 +132,7 @@ public class Main {
           }
            
     }
-//Aqueta funcio elimina un alumne
+    //En aquet metode, elimina un alumne ficant el dni del alumne, que es vol elimminar
     private static void esborrarAlumne(){
         try{
         System.out.println("Digues el dni del alumne que vols eliminar");
@@ -145,7 +145,7 @@ public class Main {
         res = stmt.executeQuery("SELECT * FROM alumnes WHERE dni = '"+ dni +"'");
         
         //System.out.println(res.next());
-     
+        //El res retorna un boolea
         if(res.next()==true){
              stmt = (Statement) con.createStatement();
             stmt.execute("DELETE FROM alumnes WHERE dni = '"+ dni +"'");
@@ -157,7 +157,8 @@ public class Main {
         }
         
     }
-
+    //En aqueta metode surt per pantalla entre claudators les antigues dades,
+    //si fas enter, no les canvia, pero si l'omples si canvia.
     private static void modificarAlumne(){   
         try{
         ResultSet resModificacio;
@@ -187,7 +188,7 @@ public class Main {
           cp=resModificacio.getString(6);
           
       
-            
+           System.out.println("Prem enter si no vols modificar res");
            sc.nextLine();//comprobar si hace falta esta linea
            System.out.println("Nom["+n+"]: ");
            Nom = sc.nextLine();
@@ -223,7 +224,8 @@ public class Main {
 
     
     }
-    
+    //En aquet metode, afegeix una nova població,demana codi postal i nom de la població,
+    //si el nom de la població ja existeix dins de la base de dades no es tornarà a crear  
       private static void afegirPoblacions(){   
        try{
          ResultSet resConsul;
@@ -256,7 +258,7 @@ public class Main {
          }
          
         }
-
+      //Aquet metode mostra tots el alumnes creats
     private static void mostrarAlumnes(){
         try{
         stmt = con.prepareStatement("SELECT * FROM alumnes");
@@ -278,7 +280,7 @@ public class Main {
         } 
 
     }
-
+    //Aquet metode mostrar tots els pobles creats
     private static void mostrarPobles(){
         try{
         stmt = con.prepareStatement("SELECT * FROM poblacions");
@@ -296,7 +298,7 @@ public class Main {
         }
         
     }
-
+    //Aquet metode mostra el nom de un sol poble, corresponent al codi postal introduït
     private static void mostrar1Poble(){
        try{
         String codiPostal;
@@ -319,7 +321,7 @@ public class Main {
        }
 
     }
-
+    //Aquet metode mostra tots els camps d'un un sol alumne, ficant el dni del corresponent
     private static void mostrar1Alumne(){
        try{
         String dni;
@@ -345,7 +347,8 @@ public class Main {
           e.printStackTrace();
        }
     }
-
+    //Aquet metode esborra un codi postal i als alumnes corresponents de aquet codi
+    //mostra els alumnes que s'esborraran si, al final li dius que si que borri el codi
     private static void esborrarPoblacio(){
      try{
         int chivato;
@@ -396,9 +399,6 @@ public class Main {
              e.printStackTrace();
         }
     }
-
-  
-    
-    
+ 
       
 }
