@@ -32,6 +32,7 @@ public class tablero extends javax.swing.JFrame {
         salida = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablero = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -51,7 +52,7 @@ public class tablero extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
                 {"O", null, "O", null, "O", null, "O", null},
-                {null, "O", null, "O", null, "O", "", "O"}
+                {null, "O", null, "O", null, "O", null, "O"}
             },
             new String [] {
                 "Colum", "Colum", "Colum", "Colum", "Colum", "Colum", "Colum", "Colum"
@@ -64,18 +65,26 @@ public class tablero extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tablero);
 
+        jLabel1.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(157, 157, 157)
-                .addComponent(salida)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(13, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(58, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(157, 157, 157)
+                        .addComponent(salida)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(194, 194, 194)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -83,7 +92,10 @@ public class tablero extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addComponent(salida)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addGap(56, 56, 56))
         );
 
         pack();
@@ -111,10 +123,7 @@ public class tablero extends javax.swing.JFrame {
                 mostrarError();
             }
         } else {
-            if(movimentValid(fila, columna)){
-                if(ocupatContrari(fila, columna)){
-
-                }
+            if(movimentValid(fila, columna)){              
                 if(esBuit(fila, columna) || ocupatContrari(fila, columna)){
                     mou(fila, columna);
                 } else if (ocupatPropi(fila, columna)){
@@ -126,8 +135,8 @@ public class tablero extends javax.swing.JFrame {
     }
     
     }//GEN-LAST:event_tableroMouseClicked
-        private boolean jugaX = true;
-        private boolean jugaO = false;
+        private boolean jugaX = false;
+        private boolean jugaO = true;
         private int filaOrigen = -1;
         private int columnaOrigen = -1;
     /**
@@ -168,26 +177,16 @@ public class tablero extends javax.swing.JFrame {
         
     }
     
-    public int obtenerFilaClicada() {
-       return tablero.getSelectedRow();
-    }
 
-    public int obtenerColumnaClicada() {
-      return tablero.getSelectedColumn();
-    }
-    
-
-    
-    
     
     public void mostraError(){
-        JOptionPane.showMessageDialog(null, "Error al sel·leccionar", "ERROR DAMES", JOptionPane.ERROR_MESSAGE);
-        
+        JOptionPane.showMessageDialog(null, "Error al sel·leccionar", "ERROR DAMES", JOptionPane.ERROR_MESSAGE);    
     }
     
  
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton salida;
     private javax.swing.JTable tablero;
@@ -205,45 +204,67 @@ public class tablero extends javax.swing.JFrame {
         return (this.filaOrigen == -1);
     }
 
-    private boolean esO(int fila, int columna) {
-         return (tablero.getModel().getValueAt(fila, columna).toString().equalsIgnoreCase("O"));
+
+     public boolean esO(int fila, int columna) {
+       return ((tablero.getValueAt(fila,columna)!=null)&&(tablero.getValueAt(fila,columna).equals("O")));
     }
+    
+    public boolean esX(int fila, int columna) {
+        return ((tablero.getValueAt(fila,columna)!=null)&&(tablero.getValueAt(fila,columna).equals("X")));
+    }
+    
+
 
     private void actualitzaNouOrigen(int fila, int columna) {
         this.filaOrigen = fila;
         this.columnaOrigen = columna;
     }
 
-    private boolean esX(int fila, int columna) {
-        return (tablero.getModel().getValueAt(fila, columna).toString().equalsIgnoreCase("X"));
-    }
 
     private void mostrarError() {
           //falta colocar el label en el modo grafico
-        //jLabel1.setText("Clica una fixa teva");
+        jLabel1.setText("Clica una fixa teva");
+        
     }
 
     private boolean movimentValid(int fila, int columna) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        if (jugaX && (fila == filaOrigen + 1) && (columna == columnaOrigen - 1 || columna == columnaOrigen + 1)) {
+                return true;
+            } else if (jugaO && (fila == filaOrigen - 1) && (columna == columnaOrigen - 1 || columna == columnaOrigen + 1)) {
+                return true;
+            } else {
+                return false;
+    }
+    
+    
+     
     }
 
-    private boolean ocupatContrari(int fila, int columna) {
-        return (!tablero.getModel().getValueAt(fila, columna).toString().equalsIgnoreCase(tablero.getModel().getValueAt(filaOrigen, columnaOrigen).toString()));
+    private boolean ocupatContrari(int fila, int columna) {   
+        return ((jugaO&&esX(fila,columna))||jugaX&&esO(fila,columna));
     }
 
     private void mou(int fila, int columna) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       tablero.getModel().setValueAt(tablero.getModel().getValueAt(filaOrigen, columnaOrigen), fila, columna);
+       tablero.getModel().setValueAt(null, filaOrigen, columnaOrigen);
+       filaOrigen=-1;
+       columnaOrigen=-1;
+       jugaX=jugaO;
+       jugaO=!jugaX;
+       
+      
     }
 
     private boolean esBuit(int fila, int columna) {
-        return (tablero.getModel().getValueAt(fila, columna).equals(""));
+        return ((tablero.getValueAt(fila,columna)==null)||tablero.getModel().getValueAt(fila, columna).equals(""));
     }
 
     private boolean ocupatPropi(int fila, int columna) {
-        return (tablero.getModel().getValueAt(fila, columna).toString().equalsIgnoreCase(tablero.getModel().getValueAt(filaOrigen, columnaOrigen).toString()));
+      return ((jugaO&&esO(fila,columna)||jugaX&&esX(fila,columna)));     
     }
 
     private void mostraErrorMoviment() {
-      
+      jLabel1.setText("Error moviment");
     }
 }
