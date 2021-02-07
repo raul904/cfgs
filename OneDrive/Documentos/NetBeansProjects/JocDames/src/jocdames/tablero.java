@@ -18,8 +18,9 @@ public class tablero extends javax.swing.JFrame {
      */
     public tablero() {
         initComponents();
+       
     }
-
+     private static String strings = "";
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -112,6 +113,7 @@ public class tablero extends javax.swing.JFrame {
        int columna = obtenirColumnaClicada();
        int fila = obtenirFilaClicada();
        
+       
         
         if(noHiHaOrigen()){
             if(jugaO && esO(fila, columna)){
@@ -172,8 +174,9 @@ public class tablero extends javax.swing.JFrame {
                 new tablero().setVisible(true);
             }
         });
-        
-        
+//        
+//        Session sessionOne = HibernateUtil.getSessionFactory().openSession();
+//        sessionOne.beginTransaction();
         
     }
     
@@ -252,6 +255,7 @@ public class tablero extends javax.swing.JFrame {
        columnaOrigen=-1;
        jugaX=jugaO;
        jugaO=!jugaX;
+       guardarMoviments();
        
       
     }
@@ -266,5 +270,10 @@ public class tablero extends javax.swing.JFrame {
 
     private void mostraErrorMoviment() {
       jLabel1.setText("Error moviment");
+    }
+
+    private void guardarMoviments() {
+      
+        
     }
 }
