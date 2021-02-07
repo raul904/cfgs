@@ -59,6 +59,10 @@ public class Partida  implements java.io.Serializable {
         this.movimientos = movimientos;
     }
 
+    public void getGanador(String ganador) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 
 
 

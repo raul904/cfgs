@@ -5,7 +5,11 @@
  */
 package jocdames;
 
+import entity.Movimiento;
+import entity.Partida;
 import javax.swing.JOptionPane;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 /**
  *
@@ -16,8 +20,14 @@ public class tablero extends javax.swing.JFrame {
     /**
      * Creates new form tablero
      */
+    static Partida partida;
+    static Session session;
+    static Movimiento movimiento;
     public tablero() {
         initComponents();
+        partida = new Partida("");
+        crearPartida("?");
+        
        
     }
      private static String strings = "";
@@ -128,6 +138,7 @@ public class tablero extends javax.swing.JFrame {
             if(movimentValid(fila, columna)){              
                 if(esBuit(fila, columna) || ocupatContrari(fila, columna)){
                     mou(fila, columna);
+                    comprueba(fila,columna);
                 } else if (ocupatPropi(fila, columna)){
                     actualitzaNouOrigen(fila, columna);
                 }
@@ -255,7 +266,7 @@ public class tablero extends javax.swing.JFrame {
        columnaOrigen=-1;
        jugaX=jugaO;
        jugaO=!jugaX;
-       guardarMoviments();
+       guardarMoviments(columnaOrigen, columna,filaOrigen,fila);
        
       
     }
@@ -272,8 +283,50 @@ public class tablero extends javax.swing.JFrame {
       jLabel1.setText("Error moviment");
     }
 
-    private void guardarMoviments() {
+   
+
+    public void guardarMoviments(int columnaOrigen, int columna, int filaOrigen, int fila) {
       
+        //guardarMoviments = new guardarMoviments(columnaOrigen,columna,filaOrigen,fila);
         
+        
+        
+    }
+
+    public static void crearPartida(String ganador) {
+       partida.setGanador(ganador);
+
+        try {
+            session = NewHibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            session.saveOrUpdate(partida);
+            session.getTransaction().commit();
+
+        } catch (HibernateException e) {
+            System.out.println(" a " + e);
+        } finally {
+            session.close();
+        }
+    }
+    
+    public void comprueba(int fila, int columna){
+    if(esO(fila, columna) && fila == 0){
+            JOptionPane.showMessageDialog(null, "guanya el jugador 'O'\n", 
+                    "FI DE PARTIDA", 
+                JOptionPane.PLAIN_MESSAGE);
+            crearPartida("O");
+            Game fra = new Game();
+            fra.setVisible(true);
+            dispose();
+        } else if (esX(fila, columna) && fila == 7){
+            JOptionPane.showMessageDialog(null, "guanya el jugador 'X'\n", 
+                    "FI DE PARTIDA", 
+                JOptionPane.PLAIN_MESSAGE);
+            crearPartida("X");
+            Game fra = new Game();
+            fra.setVisible(true);
+            dispose();
+        }
+    
     }
 }
