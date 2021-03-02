@@ -156,6 +156,7 @@ class PanelNau extends JPanel implements Runnable, KeyListener{
         
         }else{
         bullet.pinta(g);
+           
         }
  
    
@@ -239,7 +240,7 @@ class PanelNau extends JPanel implements Runnable, KeyListener{
  
         y=y + dsy;
         // si arriva als marges ...
-        if ( y >= 460 - ty || y<=ty ) dsy = - dsy;
+        if ( y >= 460 - ty || y<=ty ) dsy = 0;
         }
     
       public void run() {
