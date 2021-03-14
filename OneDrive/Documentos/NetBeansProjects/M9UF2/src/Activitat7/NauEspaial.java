@@ -10,7 +10,6 @@ package Activitat7;
  * and open the template in the editor.
  */
 
-
 /**
  *
  * @author Raul
@@ -64,7 +63,7 @@ public class NauEspaial extends javax.swing.JFrame {
 
 
 class PanelNau extends JPanel implements Runnable, KeyListener{
-    private int numNaus=3;
+    private int numNaus=10;
     private int numBullets=6;
     int pos=0;
     boolean revisa;
@@ -157,7 +156,8 @@ class PanelNau extends JPanel implements Runnable, KeyListener{
         super.paintComponent(g);
       
       double rang;
-        double contacto;
+        double colisio;
+        
         for(int y=0; y<nau.length;++y){
            if (nau[y]!=null) {
             nau[y].pinta(g);
@@ -174,20 +174,33 @@ class PanelNau extends JPanel implements Runnable, KeyListener{
                   
                        rang = Math.sqrt((bullet[i].getX() - nau[y].getX())*(bullet[i].getX() - nau[y].getX())
                                + (bullet[i].getY() - nau[y].getY())*(bullet[i].getY() - nau[y].getY()));
-                 
+                          if (jugador!=null) {
+                       colisio = Math.sqrt((jugador.getX() - nau[y].getX())*(jugador.getX() - nau[y].getX())
+                        + (jugador.getY() - nau[y].getY())*(jugador.getY() - nau[y].getY()));
+                           if (colisio<30) {
+                           if(!revisa) {
+                               jugador=null;
+                            JOptionPane.showMessageDialog(null,"T'han xocat", "Has perdut.", 
+                                JOptionPane.ERROR_MESSAGE);
+                                revisa = true;
+                                System.exit(0);
+                                    }
+                            
+                                           }
+                                            }
+                       
                        if (rang<25) {
                            nau[y]=null;
                            bullet[i]=null;
-                           numNaus--;
-                        
-                       }
-                   }
-                }
+                           numNaus--;                       
+                                    }
+                        }
+                                                        }
                 
-            }
-        }
+                                                }
+                                    }
         
-     }
+                                    }
 
      class Bullet extends Thread {
             private int numero;
@@ -284,10 +297,8 @@ class PanelNau extends JPanel implements Runnable, KeyListener{
     
     }
      
-     
-
-   
-    }
+        
+}
 
 
 class Nau extends Thread {
