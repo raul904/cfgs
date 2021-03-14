@@ -65,14 +65,19 @@ public class NauEspaial extends javax.swing.JFrame {
 
 class PanelNau extends JPanel implements Runnable, KeyListener{
     private int numNaus=3;
+    private int numBullets=6;
+    int pos=0;
+    boolean revisa;
+    
     //private int nauPropia=1;
     Nau[] nau;
     Nau jugador;
  
-    Bullet bullet;
+    Bullet[] bullet;
     
     public PanelNau(){        
         nau = new Nau[numNaus];
+        bullet = new Bullet [numBullets];
         for (int i=0;i<nau.length;i++) {
             Random rand = new Random();
             int velocitat=(rand.nextInt(3)+5)*10;
@@ -81,16 +86,14 @@ class PanelNau extends JPanel implements Runnable, KeyListener{
             int dX=rand.nextInt(3)+1;
             int dY=rand.nextInt(3)+1;
             nau[i]= new Nau(i,posX,posY,dX,dY,velocitat);
-            //bullet[i] = new Bullet(i,posX,posY,dX,dY,velocitat);
+       
+          
             }
         //Una bala
     
         //Creo la nau propia
         jugador = new Nau(4,200,450,0,0,100);
-        //Creo fil per anar pintant cada o,1 segons el joc per pantalla
-         //(int numero, int x, int y, int dsy, int v)
-        
-        bullet = new Bullet(3,this.jugador.getX(),this.jugador.getY(),0,100);
+
         
         Thread n = new Thread(this);
         n.start();   
@@ -120,9 +123,13 @@ class PanelNau extends JPanel implements Runnable, KeyListener{
                 break;
              
             case KeyEvent.VK_SPACE:
-                this.bullet.x=this.jugador.getX();
-                this.bullet.y=this.jugador.getY();
-                this.bullet.setDsy(-10);
+               if (bullet[pos]==null) {
+                bullet[pos] = new Bullet(pos, jugador.getX()+20,jugador.getY(), 0, -10, 70);
+                }
+                         pos++;
+                if (pos==bullet.length) {
+                    pos = 0;
+                }
                 break;
                 
                
@@ -147,30 +154,63 @@ class PanelNau extends JPanel implements Runnable, KeyListener{
         }
 
     public void paintComponent(Graphics g) {
-       
         super.paintComponent(g);
-        for(int i=0; i<nau.length;++i) nau[i].pinta(g);
-        
+      
+      double rang;
+        double contacto;
+        for(int y=0; y<nau.length;++y){
+           if (nau[y]!=null) {
+            nau[y].pinta(g);
+           } 
+           if (jugador!=null) {
         jugador.pinta(g);
-        if(bullet.getDsy()==0){
+           }
+            for(int i=0; i<bullet.length;i++) {
+                if ((bullet[i] != null)&&(nau[y]!=null)) {
+                   if(bullet[i].getY() < 0) {
+                       bullet[i] = null;
+                   } else {
+                       bullet[i].pinta(g);
+                  
+                       rang = Math.sqrt((bullet[i].getX() - nau[y].getX())*(bullet[i].getX() - nau[y].getX())
+                               + (bullet[i].getY() - nau[y].getY())*(bullet[i].getY() - nau[y].getY()));
+                 
+                       if (rang<25) {
+                           nau[y]=null;
+                           bullet[i]=null;
+                           numNaus--;
+                        
+                       }
+                   }
+                }
+                
+            }
+        }
         
-        }else{
-        bullet.pinta(g);
-           
-        }
- 
-   
-        }
+     }
 
      class Bullet extends Thread {
             private int numero;
             private int x,y;
-            private int dsy,v;
+            private int dsy,dsx;
+            private int v;
             private int tx = 10;
             private int ty = 10;
             
             private String img = "/images/bullet.jpg";
             private Image image2;
+
+        public Bullet(int numero, int x, int y, int dsx, int dsy, int v) {
+        this.numero = numero;
+        this.x=x;
+        this.y=y;
+        this.dsx=dsx;
+        this.dsy=dsy;
+        this.v=v;
+        image2 = new ImageIcon(Nau.class.getResource("bullet.png")).getImage();
+        Thread t = new Thread(this);
+        t.start();
+        }
 
         public int getDsy() {
             return dsy;
@@ -221,16 +261,7 @@ class PanelNau extends JPanel implements Runnable, KeyListener{
         }
             
 
-        public Bullet(int numero, int x, int y, int dsy, int v) {
-            this.numero = numero;
-            this.x=x;
-            this.y=y;
-            this.dsy=dsy;
-            this.v=v;
-            image2 = new ImageIcon(Bullet.class.getResource("bullet.png")).getImage();
-            Thread t = new Thread(this);
-            t.start();
-        }
+    
     public synchronized void pinta (Graphics g) {
            Graphics2D g2d = (Graphics2D)g;
            g2d.drawImage(this.image2, x, y, null);
@@ -239,8 +270,7 @@ class PanelNau extends JPanel implements Runnable, KeyListener{
       public synchronized void moure (){
  
         y=y + dsy;
-        // si arriva als marges ...
-        if ( y >= 460 - ty || y<=ty ) dsy = 0;
+
         }
     
       public void run() {
