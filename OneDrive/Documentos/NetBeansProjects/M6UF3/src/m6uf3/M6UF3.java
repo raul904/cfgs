@@ -118,7 +118,7 @@ public class Activitat3 {
       
             
             }else{
-                 System.out.println("LA CONSULTA NO TORNA RES");
+                 System.out.println("LA CONSULTA HA SIGUT EXISTOSA");
                 
                  ResourceSet result = 
                     servei.query( " update insert <DEP_ROW>"+"<DEPT_NO>"+depNum+"</DEPT_NO>"+"<DNOMBRE>"+ dNombre+"</DNOMBRE>"+"<LOC>"+loc+"</LOC>"+"</DEP_ROW> into /departamentos");
@@ -151,7 +151,7 @@ public class Activitat3 {
          ResourceIterator i;
             i = result2.getIterator();
             if(i.hasMoreResources()){
-                    System.out.println("LA CONSULTA NO TORNA RES");
+                    System.out.println("LA CONSULTA HA SIGUT EXISTOSA");
                 
                  ResourceSet result = 
                     servei.query( "update delete //DEP_ROW[DEPT_NO = "+depNum+"]");
@@ -198,7 +198,7 @@ public class Activitat3 {
          ResourceIterator i;
             i = result2.getIterator();
             if(i.hasMoreResources()){
-                 System.out.println("LA CONSULTA NO TORNA RES");
+                 System.out.println("LA CONSULTA HA SIGUT EXISTOSA");
                 
                  ResourceSet result = 
                  servei.query( " update replace /departamentos/DEP_ROW[DEPT_NO = "+depNum+"] with <DEP_ROW> <DEPT_NO>"+depNum+"</DEPT_NO>"+"<DNOMBRE>"+ dNombre+"</DNOMBRE>"+"<LOC>"+loc+"</LOC>"+"</DEP_ROW>");
