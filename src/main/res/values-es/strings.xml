@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tab1">Inferior 5</string>
+    <string name="tab2">Inferior 10</string>
+    <string name="tab3">Inferior 20</string>
+</resources>

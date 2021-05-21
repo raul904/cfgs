@@ -3,7 +3,6 @@ package com.rgp.kushun.pcgamesdealstracker.models;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,30 +14,34 @@ import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
 import com.rgp.kushun.pcgamesdealstracker.R;
+import com.rgp.kushun.pcgamesdealstracker.R;
+import com.rgp.kushun.pcgamesdealstracker.ui.slideshow.SlideshowFragment;
 import com.squareup.picasso.Picasso;
 
-import java.security.Timestamp;
+import java.sql.Date;
 
 public class AdapterDeals extends RecyclerView.Adapter<AdapterDeals.DealsViewHolder> {
 
-    private Deals[] arrayDeals;
+    private com.rgp.kushun.pcgamesdealstracker.models.Deals[] arrayDeals;
     private NavController navController;
     private Context context;
+    private int tienda;
 
-    public AdapterDeals(Deals[] arrayDeals, NavController navController,Context context) {
+    public AdapterDeals(com.rgp.kushun.pcgamesdealstracker.models.Deals[] arrayDeals, NavController navController, Context context, int tienda) {
         this.arrayDeals = arrayDeals;
         this.navController = navController;
         this.context = context;
+        this.tienda = tienda;
     }
+
 
     @NonNull
     @Override
     public AdapterDeals.DealsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         DealsViewHolder vh;
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_games,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_games3, parent, false);
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,45 +52,59 @@ public class AdapterDeals extends RecyclerView.Adapter<AdapterDeals.DealsViewHol
         return vh;
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull AdapterDeals.DealsViewHolder holder, final int position) {
         Long saving;
         String img;
-        Timestamp ts;
+        String numero = arrayDeals[position].getReleaseDate().toString();
+        long epoca = Long.parseLong(numero);
+        Date fecha = new Date(epoca * 1000);
 
-        Log.i("caca",arrayDeals[position].toString());
-    holder.tvGameName.setText(arrayDeals[position].getTitle());
-    holder.tvFinalPrice.setText(arrayDeals[position].getSalePrice());
-    //Conversio a data, buscar format tvRelease (integer)
-        //ts = (Timestamp) arrayDeals[position].getReleaseDate();
-        //Timestamp ts=new Timestamp(System.currentTimeMillis());
-        //Date date=new Date(ts.getTime());
-       // System.out.println(date);
+        if (SlideshowFragment.sale==5){
+
+
+        }
+
+        holder.tvGameName.setText(arrayDeals[position].getTitle());
+        holder.tvFinalPrice.setText(arrayDeals[position].getSalePrice());
+        //Conversio a data, buscar format tvRelease (integer)
         //header.jpg
         //library_600x900_2x.jpg
         //page_bg_generated_v6b.jpg
-        Picasso.get().load(arrayDeals[position].getThumb().replace("capsule_sm_120.jpg","header.jpg")).into(holder.ivBanner);
-        holder.tvRelease.setText(""+arrayDeals[position].getReleaseDate());
-    holder.tvOriginalPrice.setText(arrayDeals[position].getNormalPrice());
-        saving =  Math.round(Double.parseDouble(arrayDeals[position].getSavings()));
-    holder.tvDiscount.setText(saving.toString()+"%");
+        Picasso.get().load(arrayDeals[position].getThumb().replace("capsule_sm_120.jpg", "header.jpg")).into(holder.ivBanner);
+        holder.tvRelease.setText(fecha.toString());
+        holder.tvOriginalPrice.setText(arrayDeals[position].getNormalPrice());
+        saving = Math.round(Double.parseDouble(arrayDeals[position].getSavings()));
+        holder.tvDiscount.setText(saving.toString() + "%");
 
 
         holder.ivBanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent;
-                String url="https://store.steampowered.com/app/35140/Batman_Arkham_Asylum_Game_of_the_Year_Edition/";
+                if (tienda == 1) {
+                    intent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("https://store.steampowered.com/app/" + arrayDeals[position].getSteamAppID()));
+                    context.startActivity(intent);
+                } else if (tienda == 2) {
+                    String busquedaBotiga2;
+                    busquedaBotiga2 = arrayDeals[position].getTitle().toLowerCase();
+                    busquedaBotiga2 = busquedaBotiga2.replace(" ", "-");
+                    busquedaBotiga2 = busquedaBotiga2.replace(":-", "-");
+                    intent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("https://es.gamersgate.com/es/product/" + busquedaBotiga2));
+                    context.startActivity(intent);
 
-                //Toast.makeText(context, "rulas",Toast.LENGTH_SHORT).show();
-                Bundle bundle = new Bundle();
-                //Podriem passar nomes el symbol, però podem passat tots els valors per evitar fer mes peticions
-                bundle.putString("gameId", arrayDeals[position].getSteamAppID());
-                //Podem serialitzar tot l'objecte i passar-lo com a parametre
-                bundle.putString("Object",new Gson().toJson(arrayDeals[position]));
-                navController.navigate(R.id.web, bundle);
-                intent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://store.steampowered.com/app/" + arrayDeals[position].getSteamAppID().toString()));
+                } else if (tienda == 3) {
+                    String busqueda = null;
+                    busqueda = arrayDeals[position].getTitle().toLowerCase();
+                    busqueda = busqueda.replace(" ", "-");
+                    busqueda = busqueda.replace("--", "-");
+                    intent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("https://www.gamebillet.com/search?q=" + busqueda));
+                    context.startActivity(intent);
+                }
 
             }
         });
@@ -124,8 +141,7 @@ public class AdapterDeals extends RecyclerView.Adapter<AdapterDeals.DealsViewHol
             tvFinalPrice = itemView.findViewById(R.id.tvFinalPrice);
             tvDiscount = itemView.findViewById(R.id.tvDiscount);
             ivBanner = itemView.findViewById(R.id.ivBanner);
-            viewItem= itemView.findViewById(R.id.viewItem);
-
+            viewItem = itemView.findViewById(R.id.viewItem3);
 
 
         }

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "405904285400",
+    "project_id": "pcgamesdeals-d5519",
+    "storage_bucket": "pcgamesdeals-d5519.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:405904285400:android:b78e27624aa2aec936c1ad",
+        "android_client_info": {
+          "package_name": "com.rgp.kushun.pcgamesdealstracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "405904285400-o8ac1lbs6atfq0jj8r4hl7i2bcqffctj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDu9ODNETSOfVwYwUE74bmaUo8OJlFKnUo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "405904285400-o8ac1lbs6atfq0jj8r4hl7i2bcqffctj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
