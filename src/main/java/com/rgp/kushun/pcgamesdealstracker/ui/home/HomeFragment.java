@@ -73,20 +73,8 @@ public class HomeFragment extends Fragment {
         btSearch.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 inicialiceDataSearch(editText.getText().toString());
+//
 
-                if (recyclerView.getAdapter() != null) {
-                    //De esta manera sabes si tu RecyclerView está vacío
-                    if (recyclerView.getAdapter().getItemCount() == 0) {
-                        //Aquí muestras el mensaje
-                        Alerter.create(getActivity())
-                                .setTitle("No encontado")
-                                .setText("No encontrado")
-                                .setDuration(5000)
-                                .setIcon(R.drawable.notfound)
-                                .setBackgroundColorRes(R.color.colorAccent)
-                                .show();
-                    }
-                }
 
             }
 
@@ -147,8 +135,8 @@ public class HomeFragment extends Fragment {
                         Log.i("TAG", arrayDeals.toString());
                         if (arrayDeals.length == 0) {
                             Alerter.create(getActivity())
-                                    .setTitle("No encontado")
-                                    .setText("No encontrado")
+                                    .setTitle(R.string.notFound)
+                                    .setText(R.string.noAvailable)
                                     .setDuration(2000)
                                     .setIcon(R.drawable.notfound)
                                     .setBackgroundColorRes(R.color.colorAccent)

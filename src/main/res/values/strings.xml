@@ -13,4 +13,6 @@
     <string name="tab1">Under 5</string>
     <string name="tab2">Under 10</string>
     <string name="tab3">Under 20</string>
+    <string name="notFound">Not Found</string>
+    <string name="noAvailable">No Available</string>
 </resources>
